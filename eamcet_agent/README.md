@@ -249,6 +249,27 @@ pip install psycopg2-binary
 - Check both `__init__.py` and `agent.py` exist in `eamcet_agent/`
 - Restart the server
 
+## 🎯 Career Roadmap Agent
+
+**New Feature**: Personalized M.Tech to Career Roadmaps
+
+### What It Does
+- Analyzes your profile and skills
+- Searches 257 M.Tech specializations  
+- Recommends colleges from 452 options
+- Generates month-by-month career roadmap
+- Shows salary progression and job market
+
+### Try It
+```
+"I'm a developer with 2 years experience and want to move into AI. Create a complete roadmap."
+```
+
+### Output
+3-phase roadmap with colleges, timeline, salary progression, and monthly milestones.
+
+See `docs/CAREER_ROADMAP_README.md` for complete guide.
+
 ## License
 
 Built with Google ADK Python SDK
