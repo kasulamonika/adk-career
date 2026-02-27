@@ -95,18 +95,26 @@ def count_colleges(district: str) -> dict:
 
 
 # ========================
+# IMPORTS FROM AGENTS
+# ========================
+
+from .agents.career_coordinator import career_coordinator
+
+
+# ========================
 # AGENT CONFIGURATION
 # ========================
 
 root_agent = Agent(
     model="gemini-2.0-flash",
     name="eamcet_agent",
-    description="Agent that searches AICTE approved M.Tech colleges in Cloud SQL.",
+    description="Multi-agent system for M.Tech colleges and personalized career planning",
     instruction=(
-        "You are an assistant that helps users find AICTE approved M.Tech colleges. "
-        "When users ask about colleges in a specific district, use the search_colleges tool to fetch data. "
-        "If they ask for counts or statistics, use the count_colleges tool. "
-        "Always provide clear information about college name, address, course, and intake capacity."
+        "You are an intelligent router directing users to specialists.\n\n"
+        "COLLEGE SEARCH QUERIES: 'find colleges', 'colleges in', 'M.Tech where' → use college_search_tools\n"
+        "CAREER PLANNING QUERIES: 'career path', 'roadmap', 'specialization', 'what should I study' → use career_coordinator\n"
+        "COMBINED QUERIES: Answer college questions first, then coordinate career roadmap\n\n"
+        "Route intelligently and provide clear context when delegating."
     ),
-    tools=[search_colleges, count_colleges],
+    tools=[search_colleges, count_colleges, career_coordinator]
 )
