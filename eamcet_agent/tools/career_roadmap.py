@@ -203,14 +203,14 @@ def generate_college_to_career_roadmap(
     college_recommendations = rank_colleges(colleges, target_specialization)[:3]
     
     # Generate salary progression
-    base_salary = 60  # 60 LPA (Lakhs Per Annum) base
+    base_salary = 8  # 8 LPA (Lakhs Per Annum) base for M.Tech fresh graduates
     salary_progression = {
         "M.Tech_start": base_salary,
-        "Year_1": base_salary + 5,  # 65 LPA
-        "Year_2": base_salary + 12,  # 72 LPA
-        "Year_3": base_salary + 20,  # 80 LPA
-        "Year_5": base_salary + 35,  # 95 LPA
-        "Year_10": base_salary + 60  # 120 LPA
+        "Year_1": base_salary + 4,   # 12 LPA
+        "Year_2": base_salary + 10,  # 18 LPA
+        "Year_3": base_salary + 17,  # 25 LPA
+        "Year_5": base_salary + 32,  # 40 LPA
+        "Year_10": base_salary + 57  # 65 LPA
     }
     
     # Construct phases
