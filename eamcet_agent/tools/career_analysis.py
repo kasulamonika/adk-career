@@ -1,7 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 def get_db_connection():
     return psycopg2.connect(
@@ -26,6 +26,7 @@ def search_career_specializations(interest: str) -> Dict[str, Any]:
     Returns:
         dict with matching specializations and college count per specialization
     """
+    conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -45,7 +46,6 @@ def search_career_specializations(interest: str) -> Dict[str, Any]:
         cursor.execute(query, (f"%{interest.lower()}%",))
         results = cursor.fetchall()
         cursor.close()
-        conn.close()
         
         return {
             "status": "success",
@@ -54,9 +54,12 @@ def search_career_specializations(interest: str) -> Dict[str, Any]:
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    finally:
+        if conn is not None:
+            conn.close()
 
 
-def get_colleges_for_specialization(specialization: str, district: str = None) -> Dict[str, Any]:
+def get_colleges_for_specialization(specialization: str, district: Optional[str] = None) -> Dict[str, Any]:
     """
     Get colleges offering a specific specialization.
     
@@ -67,6 +70,7 @@ def get_colleges_for_specialization(specialization: str, district: str = None) -
     Returns:
         dict with colleges, intake, and location details
     """
+    conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -97,7 +101,6 @@ def get_colleges_for_specialization(specialization: str, district: str = None) -
         
         results = cursor.fetchall()
         cursor.close()
-        conn.close()
         
         return {
             "status": "success",
@@ -106,9 +109,12 @@ def get_colleges_for_specialization(specialization: str, district: str = None) -
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    finally:
+        if conn is not None:
+            conn.close()
 
 
-def analyze_career_popularity(interest_area: str = None) -> Dict[str, Any]:
+def analyze_career_popularity(interest_area: Optional[str] = None) -> Dict[str, Any]:
     """
     Analyze which specializations are most popular (more colleges, more intake).
     
@@ -118,6 +124,7 @@ def analyze_career_popularity(interest_area: str = None) -> Dict[str, Any]:
     Returns:
         dict with most popular specializations ranked by demand
     """
+    conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -151,7 +158,6 @@ def analyze_career_popularity(interest_area: str = None) -> Dict[str, Any]:
         
         results = cursor.fetchall()
         cursor.close()
-        conn.close()
         
         # Rank by demand
         for idx, row in enumerate(results, 1):
@@ -164,6 +170,9 @@ def analyze_career_popularity(interest_area: str = None) -> Dict[str, Any]:
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 def get_regional_opportunities(user_district: str) -> Dict[str, Any]:
@@ -176,6 +185,7 @@ def get_regional_opportunities(user_district: str) -> Dict[str, Any]:
     Returns:
         dict with colleges and specializations available in region
     """
+    conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -209,7 +219,6 @@ def get_regional_opportunities(user_district: str) -> Dict[str, Any]:
         cursor.execute(query2, (f"%{user_district.lower()}%",))
         courses = cursor.fetchall()
         cursor.close()
-        conn.close()
         
         return {
             "status": "success",
@@ -219,6 +228,9 @@ def get_regional_opportunities(user_district: str) -> Dict[str, Any]:
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 def match_skills_to_specializations(user_skills: List[str]) -> Dict[str, Any]:
@@ -231,6 +243,7 @@ def match_skills_to_specializations(user_skills: List[str]) -> Dict[str, Any]:
     Returns:
         dict with recommended specializations ranked by relevance
     """
+    conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -247,7 +260,6 @@ def match_skills_to_specializations(user_skills: List[str]) -> Dict[str, Any]:
         cursor.execute(query)
         all_courses = cursor.fetchall()
         cursor.close()
-        conn.close()
         
         # Rank specializations by relevance to user skills
         recommendations = []
@@ -277,6 +289,9 @@ def match_skills_to_specializations(user_skills: List[str]) -> Dict[str, Any]:
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 def get_growth_specializations() -> Dict[str, Any]:
@@ -287,6 +302,7 @@ def get_growth_specializations() -> Dict[str, Any]:
     Returns:
         dict with growth potential specializations
     """
+    conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -306,7 +322,6 @@ def get_growth_specializations() -> Dict[str, Any]:
         cursor.execute(query)
         results = cursor.fetchall()
         cursor.close()
-        conn.close()
         
         # Mark growth specializations
         growth_sectors = []
@@ -325,3 +340,6 @@ def get_growth_specializations() -> Dict[str, Any]:
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    finally:
+        if conn is not None:
+            conn.close()

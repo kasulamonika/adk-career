@@ -2,6 +2,7 @@ import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from google.adk.agents.llm_agent import Agent
+from typing import Optional
 
 # ========================
 # DATABASE CONFIGURATION
@@ -28,6 +29,7 @@ def search_colleges(district: str) -> dict:
     Returns:
         dict with status and college data or error message
     """
+    conn = None
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -43,7 +45,6 @@ def search_colleges(district: str) -> dict:
         results = cursor.fetchall()
         
         cursor.close()
-        conn.close()
         
         return {
             "status": "success",
@@ -55,6 +56,9 @@ def search_colleges(district: str) -> dict:
             "status": "error",
             "message": str(e)
         }
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 def count_colleges(district: str) -> dict:
@@ -67,6 +71,7 @@ def count_colleges(district: str) -> dict:
     Returns:
         dict with status and college count or error message
     """
+    conn = None
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cursor = conn.cursor()
@@ -81,7 +86,6 @@ def count_colleges(district: str) -> dict:
         count = cursor.fetchone()[0]
         
         cursor.close()
-        conn.close()
         
         return {
             "status": "success",
@@ -92,6 +96,9 @@ def count_colleges(district: str) -> dict:
             "status": "error",
             "message": str(e)
         }
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 # ========================
@@ -112,9 +119,10 @@ root_agent = Agent(
     instruction=(
         "You are an intelligent router directing users to specialists.\n\n"
         "COLLEGE SEARCH QUERIES: 'find colleges', 'colleges in', 'M.Tech where' → use college_search_tools\n"
-        "CAREER PLANNING QUERIES: 'career path', 'roadmap', 'specialization', 'what should I study' → use career_coordinator\n"
-        "COMBINED QUERIES: Answer college questions first, then coordinate career roadmap\n\n"
+        "CAREER PLANNING QUERIES: 'career path', 'roadmap', 'specialization', 'what should I study' → delegate to career_coordinator\n"
+        "COMBINED QUERIES: Answer college questions first, then delegate career roadmap to career_coordinator\n\n"
         "Route intelligently and provide clear context when delegating."
     ),
-    tools=[search_colleges, count_colleges, career_coordinator]
+    tools=[search_colleges, count_colleges],
+    sub_agents=[career_coordinator],
 )
