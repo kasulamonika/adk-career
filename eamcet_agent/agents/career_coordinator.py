@@ -22,7 +22,7 @@ from eamcet_agent.tools.career_roadmap import (
 # ========================
 
 career_coordinator = Agent(
-    model="gemini-2.0-flash",
+    model="gemini-flash-latest",
     name="career_coordinator",
     description="Intelligent career advisor that creates personalized M.Tech to career roadmaps",
     instruction=(

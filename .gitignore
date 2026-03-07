@@ -1,7 +1,30 @@
+# Worktrees
 .worktrees/
+
+# Virtual environment
+.venv/
+venv/
+
+# Copilot / ADK agent skills (tool-generated)
+.agents/
+skills-lock.json
+
+# Environment variables
 .env
+
+# Python bytecode
 __pycache__/
 *.pyc
 *.pyo
+
+# ADK runtime
 .adk/
 *.db
+
+# Generated reports and status files
+FINAL_STATUS.txt
+IMPLEMENTATION_REPORT.md
+CAREER_ROADMAP_SUMMARY.md
+
+# One-off debug/utility scripts
+check_db_schema.py

@@ -113,7 +113,7 @@ from .agents.career_coordinator import career_coordinator
 # ========================
 
 root_agent = Agent(
-    model="gemini-2.0-flash",
+    model="gemini-flash-latest",
     name="eamcet_agent",
     description="Multi-agent system for M.Tech colleges and personalized career planning",
     instruction=(
