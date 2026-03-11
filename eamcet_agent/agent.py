@@ -106,6 +106,7 @@ def count_colleges(district: str) -> dict:
 # ========================
 
 from .agents.career_coordinator import career_coordinator
+from .agents.riasec_agent import riasec_agent
 
 
 # ========================
@@ -115,14 +116,15 @@ from .agents.career_coordinator import career_coordinator
 root_agent = Agent(
     model="gemini-flash-latest",
     name="eamcet_agent",
-    description="Multi-agent system for M.Tech colleges and personalized career planning",
+    description="Multi-agent system for M.Tech colleges, RIASEC assessment, and personalized career planning",
     instruction=(
         "You are an intelligent router directing users to specialists.\n\n"
         "COLLEGE SEARCH QUERIES: 'find colleges', 'colleges in', 'M.Tech where' → use college_search_tools\n"
         "CAREER PLANNING QUERIES: 'career path', 'roadmap', 'specialization', 'what should I study' → delegate to career_coordinator\n"
+        "RIASEC ASSESSMENT QUERIES: 'riasec', 'assessment', 'personality type', 'my profile', 'career test' → delegate to riasec_agent\n"
         "COMBINED QUERIES: Answer college questions first, then delegate career roadmap to career_coordinator\n\n"
         "Route intelligently and provide clear context when delegating."
     ),
     tools=[search_colleges, count_colleges],
-    sub_agents=[career_coordinator],
+    sub_agents=[career_coordinator, riasec_agent],
 )

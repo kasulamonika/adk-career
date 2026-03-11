@@ -28,3 +28,10 @@ CAREER_ROADMAP_SUMMARY.md
 
 # One-off debug/utility scripts
 check_db_schema.py
+
+# Frontend build and dependencies
+career_assessment/frontend/node_modules/
+career_assessment/frontend/build/
+
+# SQLite assessment database (generated at runtime)
+career_assessment/db/career_assessment.db
